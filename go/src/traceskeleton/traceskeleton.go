@@ -25,138 +25,138 @@ const (
 // DATASTRUCTURES
 //================================
 
-type point_t struct {
-	x    int
-	y    int
-	next *point_t
+type Point struct {
+	X    int
+	Y    int
+	Next *Point
 }
-type polyline_t struct {
-	head *point_t
-	tail *point_t
-	prev *polyline_t
-	next *polyline_t
-	size int
+type Polyline struct {
+	Head *Point
+	Tail *Point
+	Prev *Polyline
+	Next *Polyline
+	Size int
 }
 
 //================================
 // DATASTRUCTURE IMPLEMENTATION
 //================================
 
-func newPolyline() *polyline_t {
-	var q *polyline_t = new(polyline_t)
-	q.head = nil
-	q.tail = nil
-	q.prev = nil
-	q.next = nil
-	q.size = 0
+func newPolyline() *Polyline {
+	var q *Polyline = new(Polyline)
+	q.Head = nil
+	q.Tail = nil
+	q.Prev = nil
+	q.Next = nil
+	q.Size = 0
 	return q
 }
-func PrintPolyline(q *polyline_t) {
+func PrintPolyline(q *Polyline) {
 	if q == nil {
 		return
 	}
-	var jt *point_t = q.head
+	var jt *Point = q.Head
 	for jt != nil {
-		fmt.Printf("%d,%d ", jt.x, jt.y)
-		jt = jt.next
+		fmt.Printf("%d,%d ", jt.X, jt.Y)
+		jt = jt.Next
 	}
 	fmt.Printf("\n")
 }
-func PrintPolylines(q *polyline_t) {
+func PrintPolylines(q *Polyline) {
 	if q == nil {
 		return
 	}
-	var it *polyline_t = q
+	var it *Polyline = q
 	for it != nil {
-		var jt *point_t = it.head
+		var jt *Point = it.Head
 		for jt != nil {
-			fmt.Printf("%d,%d ", jt.x, jt.y)
-			jt = jt.next
+			fmt.Printf("%d,%d ", jt.X, jt.Y)
+			jt = jt.Next
 		}
 		fmt.Printf("\n")
-		it = it.next
+		it = it.Next
 	}
 }
-func reversePolyline(q *polyline_t) {
-	if q == nil || q.size < 2 {
+func reversePolyline(q *Polyline) {
+	if q == nil || q.Size < 2 {
 		return
 	}
-	q.tail.next = q.head
-	var it0 *point_t = q.head
-	var it1 *point_t = it0.next
-	var it2 *point_t = it1.next
-	for i := 0; i < q.size-1; i++ {
-		it1.next = it0
+	q.Tail.Next = q.Head
+	var it0 *Point = q.Head
+	var it1 *Point = it0.Next
+	var it2 *Point = it1.Next
+	for i := 0; i < q.Size-1; i++ {
+		it1.Next = it0
 		it0 = it1
 		it1 = it2
-		it2 = it2.next
+		it2 = it2.Next
 	}
-	var qHead *point_t = q.head
-	q.head = q.tail
-	q.tail = qHead
-	q.tail.next = nil
+	var qHead *Point = q.Head
+	q.Head = q.Tail
+	q.Tail = qHead
+	q.Tail.Next = nil
 }
 
-func catTailPolyline(q0 *polyline_t, q1 *polyline_t) {
+func catTailPolyline(q0 *Polyline, q1 *Polyline) {
 	if q1 == nil {
 		return
 	}
 	if q0 == nil {
 		*q0 = *newPolyline()
 	}
-	if q0.head == nil {
-		q0.head = q1.head
-		q0.tail = q1.tail
+	if q0.Head == nil {
+		q0.Head = q1.Head
+		q0.Tail = q1.Tail
 		return
 	}
-	q0.tail.next = q1.head
-	q0.tail = q1.tail
-	q0.size += q1.size
-	q0.tail.next = nil
+	q0.Tail.Next = q1.Head
+	q0.Tail = q1.Tail
+	q0.Size += q1.Size
+	q0.Tail.Next = nil
 }
 
-func catHeadPolyline(q0 *polyline_t, q1 *polyline_t) {
+func catHeadPolyline(q0 *Polyline, q1 *Polyline) {
 	if q1 == nil {
 		return
 	}
 	if q0 == nil {
 		*q0 = *newPolyline()
 	}
-	if q1.head == nil {
+	if q1.Head == nil {
 		return
 	}
-	if q0.head == nil {
-		q0.head = q1.head
-		q0.tail = q1.tail
+	if q0.Head == nil {
+		q0.Head = q1.Head
+		q0.Tail = q1.Tail
 		return
 	}
-	q1.tail.next = q0.head
-	q0.head = q1.head
-	q0.size += q1.size
-	q0.tail.next = nil
+	q1.Tail.Next = q0.Head
+	q0.Head = q1.Head
+	q0.Size += q1.Size
+	q0.Tail.Next = nil
 }
 
-func addPointToPolyline(q *polyline_t, x int, y int) {
-	var p *point_t = new(point_t)
-	p.x = x
-	p.y = y
-	p.next = nil
-	if q.head == nil {
-		q.head = p
-		q.tail = p
+func addPointToPolyline(q *Polyline, x int, y int) {
+	var p *Point = new(Point)
+	p.X = x
+	p.Y = y
+	p.Next = nil
+	if q.Head == nil {
+		q.Head = p
+		q.Tail = p
 	} else {
-		q.tail.next = p
-		q.tail = p
+		q.Tail.Next = p
+		q.Tail = p
 	}
-	q.size++
+	q.Size++
 }
 
-func prependPolyline(q0 *polyline_t, q1 *polyline_t) *polyline_t {
+func prependPolyline(q0 *Polyline, q1 *Polyline) *Polyline {
 	if q0 == nil {
 		return q1
 	}
-	q1.next = q0
-	q0.prev = q1
+	q1.Next = q0
+	q0.Prev = q1
 	return q1
 }
 
@@ -271,51 +271,51 @@ func notEmpty(im []uint8, W int, H int, x int, y int, w int, h int) bool {
  *             LSB = is matching the right (not left) end of the fragment from second chunk
  * @return     matching successful?
  */
-func mergeImpl(c0 *polyline_t, c1i *polyline_t, sx int, isv bool, mode int) bool {
+func mergeImpl(c0 *Polyline, c1i *Polyline, sx int, isv bool, mode int) bool {
 	var b0 bool = (mode >> 1 & 1) > 0 // match c0 left
 	var b1 bool = (mode >> 0 & 1) > 0 // match c1 left
-	var c0j *polyline_t = nil
+	var c0j *Polyline = nil
 	var md int = 4
-	var p1 *point_t = c1i.tail
+	var p1 *Point = c1i.Tail
 	if b1 {
-		p1 = c1i.head
+		p1 = c1i.Head
 	}
-	var xx int = p1.x
+	var xx int = p1.X
 	if isv {
-		xx = p1.y
+		xx = p1.Y
 	}
 	if abs(xx-sx) > 0 { // not on the seam, skip
 		return false
 	}
 	// find the best match
-	var it *polyline_t = c0
+	var it *Polyline = c0
 	for it != nil {
-		var p0 *point_t = it.tail
+		var p0 *Point = it.Tail
 		if b0 {
-			p0 = it.head
+			p0 = it.Head
 		}
-		var aa int = p0.x
+		var aa int = p0.X
 		if isv {
-			aa = p0.y
+			aa = p0.Y
 		}
 		if abs(aa-sx) > 1 {
-			it = it.next
+			it = it.Next
 			continue
 		}
-		var bb int = p0.y
+		var bb int = p0.Y
 		if isv {
-			bb = p0.x
+			bb = p0.X
 		}
-		var cc int = p1.y
+		var cc int = p1.Y
 		if isv {
-			cc = p1.x
+			cc = p1.X
 		}
 		var d int = abs(bb - cc)
 		if d < md {
 			c0j = it
 			md = d
 		}
-		it = it.next
+		it = it.Next
 	}
 	if c0j != nil { // best match is good enough, merge them
 		if b0 && b1 {
@@ -340,16 +340,16 @@ func mergeImpl(c0 *polyline_t, c1i *polyline_t, sx int, isv bool, mode int) bool
  * @param sx   (x or y) coordinate of the seam
  * @param dr   merge direction, HORIZONTAL or VERTICAL?
  */
-func mergeFrags(c0 *polyline_t, c1 *polyline_t, sx int, dr int) *polyline_t {
+func mergeFrags(c0 *Polyline, c1 *Polyline, sx int, dr int) *Polyline {
 	if c0 == nil {
 		return c1
 	}
 	if c1 == nil {
 		return c0
 	}
-	var it *polyline_t = c1
+	var it *Polyline = c1
 	for it != nil {
-		var tmp *polyline_t = it.next
+		var tmp *Polyline = it.Next
 		if dr == HORIZONTAL {
 			if mergeImpl(c0, it, sx, false, 1) {
 				goto rem
@@ -379,15 +379,15 @@ func mergeFrags(c0 *polyline_t, c1 *polyline_t, sx int, dr int) *polyline_t {
 		}
 		goto next
 	rem:
-		if it.prev == nil {
-			c1 = it.next
-			if it.next != nil {
-				it.next.prev = nil
+		if it.Prev == nil {
+			c1 = it.Next
+			if it.Next != nil {
+				it.Next.Prev = nil
 			}
 		} else {
-			it.prev.next = it.next
-			if it.next != nil {
-				it.next.prev = it.prev
+			it.Prev.Next = it.Next
+			if it.Next != nil {
+				it.Next.Prev = it.Prev
 			}
 		}
 	next:
@@ -395,9 +395,9 @@ func mergeFrags(c0 *polyline_t, c1 *polyline_t, sx int, dr int) *polyline_t {
 	}
 	it = c1
 	for it != nil {
-		var tmp *polyline_t = it.next
-		it.prev = nil
-		it.next = nil
+		var tmp *Polyline = it.Next
+		it.Prev = nil
+		it.Next = nil
 		c0 = prependPolyline(c0, it)
 		it = tmp
 	}
@@ -415,8 +415,8 @@ func mergeFrags(c0 *polyline_t, c1 *polyline_t, sx int, dr int) *polyline_t {
  * @param h    height of chunk
  * @return     the polyline fragments
  */
-func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *polyline_t {
-	var frags *polyline_t = nil
+func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *Polyline {
+	var frags *Polyline = nil
 	var fsize int = 0
 	var on bool = false // to deal with strokes thicker than 1px
 	var li int = -1
@@ -440,7 +440,7 @@ func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *polylin
 		if im[i*W+j] != 0 {
 			if !on {
 				on = true
-				var f *polyline_t = newPolyline()
+				var f *Polyline = newPolyline()
 				addPointToPolyline(f, j, i)
 				addPointToPolyline(f, x+w/2, y+h/2)
 				frags = prependPolyline(frags, f)
@@ -448,8 +448,8 @@ func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *polylin
 			}
 		} else {
 			if on { // right side of stroke, average to get center of stroke
-				frags.head.x = (frags.head.x + lj) / 2
-				frags.head.y = (frags.head.y + li) / 2
+				frags.Head.X = (frags.Head.X + lj) / 2
+				frags.Head.Y = (frags.Head.Y + li) / 2
 				on = false
 			}
 		}
@@ -457,9 +457,9 @@ func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *polylin
 		lj = j
 	}
 	if fsize == 2 {
-		var f *polyline_t = newPolyline()
-		addPointToPolyline(f, frags.head.x, frags.head.y)
-		addPointToPolyline(f, frags.next.head.x, frags.next.head.y)
+		var f *Polyline = newPolyline()
+		addPointToPolyline(f, frags.Head.X, frags.Head.Y)
+		addPointToPolyline(f, frags.Next.Head.X, frags.Next.Head.Y)
 		frags = f
 	} else if fsize > 2 {
 		var ms int = 0
@@ -483,11 +483,11 @@ func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *polylin
 			}
 		}
 		if mi != -1 {
-			var it *polyline_t = frags
+			var it *Polyline = frags
 			for it != nil {
-				it.tail.x = mj
-				it.tail.y = mi
-				it = it.next
+				it.Tail.X = mj
+				it.Tail.Y = mi
+				it = it.Next
 			}
 		}
 	}
@@ -508,8 +508,8 @@ func chunkToFrags(im []uint8, W int, H int, x int, y int, w int, h int) *polylin
  * @param iter    current iteration
  * @return        an array of polylines
  */
-func TraceSkeleton(im []uint8, W int, H int, x int, y int, w int, h int, chunkSize int, maxIter int) *polyline_t {
-	var frags *polyline_t = nil
+func TraceSkeleton(im []uint8, W int, H int, x int, y int, w int, h int, chunkSize int, maxIter int) *Polyline {
+	var frags *Polyline = nil
 
 	if maxIter <= 0 { // gameover
 		return frags
@@ -604,7 +604,7 @@ func TraceSkeleton(im []uint8, W int, H int, x int, y int, w int, h int, chunkSi
 		messages := make(chan int)
 		var wg sync.WaitGroup
 		wg.Add(2)
-		var pL, pR *polyline_t
+		var pL, pR *Polyline
 		go func() {
 			defer wg.Done()
 			pL = TraceSkeleton(im, W, H, L0, L1, L2, L3, chunkSize, maxIter-1)
@@ -640,24 +640,24 @@ func TraceSkeleton(im []uint8, W int, H int, x int, y int, w int, h int, chunkSi
 	return frags
 }
 
-func PolylinesToSvg(q *polyline_t, w int, h int) string {
+func PolylinesToSvg(q *Polyline, w int, h int) string {
 	var svg string = fmt.Sprintf("<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"%d\" height=\"%d\" fill=\"none\" stroke=\"black\" stroke-width=\"1\">", w, h)
 	if q == nil {
 		return svg + "</svg>"
 	}
-	var it *polyline_t = q
+	var it *Polyline = q
 	for it != nil {
-		var jt *point_t = it.head
+		var jt *Point = it.Head
 		svg += "<path d=\"M"
 		for jt != nil {
-			svg += fmt.Sprintf("%d,%d", jt.x, jt.y)
-			jt = jt.next
+			svg += fmt.Sprintf("%d,%d", jt.X, jt.Y)
+			jt = jt.Next
 			if jt != nil {
 				svg += " L"
 			}
 		}
 		svg += "\"/>"
-		it = it.next
+		it = it.Next
 	}
 	return svg + "</svg>"
 }
